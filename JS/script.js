@@ -1,12 +1,21 @@
-$( document ).ready(function() {
+//Event Listeners
+$(document).ready(function() {
     $(".dropdown-trigger").dropdown();
-}) 
+    $('a').on("click", function(event) {
+        if ($(event.target).hasClass("dayDropDowns")) {
+                generateCalendarByMonth(event.target.id ,initialYear);
+                $('#monthDropdown').text(convertMonth(event.target.id));
+            }
+    })
+
+});
 
 //runs on start
-var date = new Date();
-var initialmonth = ((date.getMonth().length+1) === 1)? (date.getMonth()+1) : '0' + (date.getMonth()+1);
-$('#monthDropdown').text(convertMonth(initialmonth));
-generateCalendarAtStart(convertMonth(initialmonth));
+var currentDate = new Date();
+var initialMonth = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1);
+var initialYear = currentDate.getFullYear();
+$('#monthDropdown').text(convertMonth(initialMonth));
+generateCalendarGrid(initialMonth, initialYear);
 
 
 
@@ -18,7 +27,35 @@ generateCalendarAtStart(convertMonth(initialmonth));
 
 
 
-function generateCalendarAtStart(month) {
+
+
+
+function generateCalendarByMonth(month, year) {
+    //Removes all prev text in calendar
+    for (var z = 1; z < 6; z++) {for (var y = 1; y < 8; y++) {
+        var tmp = (z + "." + y);
+        var cont = document.getElementById(tmp);
+        cont.innerHTML = ("");
+    }}
+
+    var day = new Date(year + "-" + month + "-01").getDay();
+    var dayCounter = 1;
+    var numOfDays = new Date(year, month, '0').getDate();
+    var firstRun = true;
+    for (var j = 1; j < 6; j++) {
+        for (var k = 1; k < 8; k++) {
+            if (firstRun) {k = day; firstRun = false;}
+            if (dayCounter == numOfDays + 1) {return;}
+            var temp = (j + "." + k);
+            var container = document.getElementById(temp);
+            container.textContent = (dayCounter);
+            dayCounter++;
+        }
+            
+    }
+}
+
+function generateCalendarGrid(month, year) {
     var daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     //this creates the first row to store days of the week
     var firstRow = $('<div>').attr('class', 'row');
@@ -35,16 +72,17 @@ function generateCalendarAtStart(month) {
         $('#calendarHolder').append(row);
         for (var j = 0; j < 7; j++)
         {
-            var col = $('<div>').attr('id', ((i+1) + "." + (j+1)));
-            col.addClass(month);
+            var col = $('<div>').attr('id', ("c" + (i+1) + "." + (j+1)));
+            col.addClass(convertMonth(month));
             col.addClass("col s1 dayBox");
             row.append(col);
             var span = $('<span>').attr('class', 'flow-text');
-            span.text(col.attr('id'));
+            span.attr("id", (i+1) + "." + (j+1) );
             col.append(span);
 
         }
     }
+    generateCalendarByMonth(month, year);
 }
 
 function convertMonth(month) {
