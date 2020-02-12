@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivial Calendar</title>
+    <link rel="stylesheet" href="CSS/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+
+</head>
+<body>
+    <nav class="nav-extended blue">
+        <div class="nav-wrapper blue"id="headerDiv">
+            <a href="#" class="brand-logo center teal" id="header">Trivial Calander</a>
+        </div>
+
+        
+
+        <div class="nav-content">
+            <ul class="tabs tabs-transparent">
+                <li><a class="dropdown-trigger tab" id="monthDropdown" href="#!" data-target="dropdown1">Month</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="calendarHolder"></div>
+
+
+
+
+<!-- This tells the drop down what should be inside the month dropdown-->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a id="01" class="dayDropDowns">January</a></li>
+            <li><a id="02" class="dayDropDowns">February</a></li>
+            <li><a id="03" class="dayDropDowns">March</a></li>
+            <li><a id="04" class="dayDropDowns">April</a></li>
+            <li><a id="05" class="dayDropDowns">May</a></li>
+            <li><a id="06" class="dayDropDowns">June</a></li>
+            <li><a id="07" class="dayDropDowns">July</a></li>
+            <li><a id="08" class="dayDropDowns">August</a></li>
+            <li><a id="09" class="dayDropDowns">September</a></li>
+            <li><a id="10" class="dayDropDowns">October</a></li>
+            <li><a id="11" class="dayDropDowns">November</a></li>
+            <li><a id="12" class="dayDropDowns">December</a></li>
+        </ul>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="JS/script.js"></script>
+</body>
+</html>
