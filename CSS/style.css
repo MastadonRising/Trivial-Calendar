@@ -6,6 +6,20 @@
     color: black;
 }
 
-/* .dayBox {
-    /* these are the boxes that hold the days */
-} */
+.dayBox{
+    text-align: left;
+    box-shadow: cadetblue 1px 1px 1px 1px;
+   height:100%;
+   padding-left: 1px 1px 1px 1px ;
+   margin: auto;
+}
+.daysOfWeek{
+    padding-left: 1px 1px 1px 1px ;
+    text-align: center;
+    padding: 1%;
+    box-shadow: cadetblue 1px 1px 1px 1px;
+}
+.headerDiv{
+    align-content: center;
+    text-align: center;
+}

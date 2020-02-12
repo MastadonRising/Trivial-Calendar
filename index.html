@@ -11,11 +11,19 @@
 
 </head>
 <body>
-    <nav class="nav-extended blue">
-        <div class="nav-wrapper blue"id="headerDiv">
-            <a href="#" class="brand-logo center teal" id="header">Trivial Calander</a>
-            <span id='clock'></span>
-        </div>
+        <nav>
+            <div class="nav-wrapper" id="headerDiv">
+              <a href="#" class="brand-logo">Trivial Calendar</a>
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><span id='clock'></span></li>
+                <li><a class="dropdown-trigger tab" id="monthDropdown" href="#!" data-target="dropdown1"</a></li>
+                <li><a class="dropdown-trigger tab" id="yearDropdown" href="#!" data-target="yearDD">Month</a></li>
+              </ul>
+            </div>
+          </nav>
+
+
+
 
         
 
@@ -27,7 +35,7 @@
         </div>
     </nav>
 
-    <div id="calendarHolder"></div>
+    <div class='container' id="calendarHolder"></div>
 
 
 
