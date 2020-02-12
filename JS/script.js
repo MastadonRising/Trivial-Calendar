@@ -14,10 +14,13 @@ $(document).ready(function() {
 var currentDate = new Date();
 var initialMonth = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
 var initialYear = currentDate.getFullYear();
-var city, region, country
+var city, region, country, weatherURL
+var APIKey = "cbe32bb3b579dad365829cdc5ba21e51"
 $('#monthDropdown').text(convertMonth(initialMonth));
 generateCalendarGrid(initialMonth, initialYear);
 locationLookup()
+setTimeout(createWeatherURL, 1000)
+setTimeout(getWeather, 2000)
 
 
 
@@ -154,5 +157,26 @@ function locationLookup() {
         city = response.city
         region = response.region_code
         country = response.country_code
+    })
+}
+
+//create weather URL
+function createWeatherURL() {
+    weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + region + "," + country + "&units=imperial&appid=" + APIKey
+}
+
+//function to pull and display current weather
+function getWeather() {
+    $.ajax({
+        url: weatherURL,
+        method: "GET"
+    }).then(function(response) {
+        var title = $('<h1>').text('Weather')
+        var humidity = $('<p>').text('Humidity: ' + response.main.humidity)
+        var wind = $('<p>').text('Wind: ' + response.wind.speed)
+        var temp = $('<p>').text('temp: ' + response.main.temp)
+
+        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png')
+
     })
 }
