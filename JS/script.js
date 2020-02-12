@@ -2,21 +2,28 @@
 $(document).ready(function() {
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
-        if ($(event.target).hasClass("dayDropDowns")) {
-                generateCalendarByMonth(event.target.id ,initialYear);
+        if ($(event.target).hasClass("monthDropDowns")) {
+                month = event.target.id;
+                generateCalendarByMonth(month ,year);
                 $('#monthDropdown').text(convertMonth(event.target.id));
             }
+        if ($(event.target).hasClass("yearDropDowns")) {
+                year = event.target.id;
+                generateCalendarByMonth(month , year);
+                $('#yearDropdown').text(event.target.id);
+        }
     })
 
 });
 
 //runs on start
 var currentDate = new Date();
-var initialMonth = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1);
-var initialYear = currentDate.getFullYear();
-$('#monthDropdown').text(convertMonth(initialMonth));
-generateCalendarGrid(initialMonth, initialYear);
+var month = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1);
+var year = currentDate.getFullYear();
+$('#monthDropdown').text(convertMonth(month));
+generateCalendarGrid(month, year);
 var clock = setInterval(setTime, 1000);
+generateYearDropdown(year);
 
 
 
@@ -28,8 +35,25 @@ var clock = setInterval(setTime, 1000);
 
 
 
+function generateYearDropdown(currentYear) {
+    year = parseInt(currentYear);
+    numOfYears = 1; //this is the number of years before and after
+    yearDropdown = $("#yearDD"); //this is the dropdown we want to add to
+    $("#yearDropdown").text(currentYear);
+
+    for (var i = currentYear - numOfYears; i < currentYear + numOfYears + 1; i++)
+    {
+        yearInsert = $("<li>");
+        yearText = $("<a>");
+        yearText.addClass("yearDropDowns");
+        yearText.text(i);
+        yearText.attr("id", i);
+        yearInsert.appendTo(yearDropdown);
+        yearText.appendTo(yearInsert);
+    }
 
 
+}
 
 function generateCalendarByMonth(month, year) {
     //Removes all prev text in calendar
@@ -46,7 +70,7 @@ function generateCalendarByMonth(month, year) {
     var firstRun = true;
     for (var j = 1; j < 6; j++) {
         for (var k = 0; k < 7; k++) {
-            if (firstRun) {k = day+1; firstRun = false;}
+            if (firstRun && (day != '6')) {k = day + 1; firstRun = false;}
             if (dayCounter == numOfDays + 1) {return;}
             var temp = (j + "." + k);
             var container = document.getElementById(temp);
@@ -131,8 +155,8 @@ function convertMonth(month) {
 
 
 function setTime(){
-    var currentTime = new Date ( );
-    var currentHours = currentTime.getHours ( );
+var currentTime = new Date ( );
+var currentHours = currentTime.getHours ( );
 var currentMinutes = currentTime.getMinutes ( );
 var currentSeconds = currentTime.getSeconds ( );
 currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
