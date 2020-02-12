@@ -68,7 +68,6 @@ function forecast() {
     })
 }
 forecast()
-    //https://api.openweathermap.org/data/2.5/forecast?q=davis,ca,us&units=imperial&appid=cbe32bb3b579dad365829cdc5ba21e51
 
 //modal
 //create modal for page
