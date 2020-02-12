@@ -2,9 +2,15 @@
 $(document).ready(function() {
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
-        if ($(event.target).hasClass("dayDropDowns")) {
-            generateCalendarByMonth(event.target.id, initialYear);
-            $('#monthDropdown').text(convertMonth(event.target.id));
+        if ($(event.target).hasClass("monthDropDowns")) {
+                month = event.target.id;
+                generateCalendarByMonth(month ,year);
+                $('#monthDropdown').text(convertMonth(event.target.id));
+            }
+        if ($(event.target).hasClass("yearDropDowns")) {
+                year = event.target.id;
+                generateCalendarByMonth(month , year);
+                $('#yearDropdown').text(event.target.id);
         }
     })
 
@@ -12,16 +18,17 @@ $(document).ready(function() {
 
 //runs on start
 var currentDate = new Date();
-var initialMonth = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
-var initialYear = currentDate.getFullYear();
-var city, region, country, weatherURL
-var APIKey = "cbe32bb3b579dad365829cdc5ba21e51"
-$('#monthDropdown').text(convertMonth(initialMonth));
-generateCalendarGrid(initialMonth, initialYear);
-locationLookup()
-setTimeout(createWeatherURL, 1000)
-setTimeout(getWeather, 2000)
+var month = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1);
+var year = currentDate.getFullYear();
+$('#monthDropdown').text(convertMonth(month));
+generateCalendarGrid(month, year);
+var city, region, country, weatherURL;
+var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
+locationLookup();
+setTimeout(createWeatherURL, 1000);
+setTimeout(getWeather, 2000);
 var clock = setInterval(setTime, 1000);
+generateYearDropdown(year);
 
 
 
@@ -33,8 +40,25 @@ var clock = setInterval(setTime, 1000);
 
 
 
+function generateYearDropdown(currentYear) {
+    year = parseInt(currentYear);
+    numOfYears = 1; //this is the number of years before and after
+    yearDropdown = $("#yearDD"); //this is the dropdown we want to add to
+    $("#yearDropdown").text(currentYear);
+
+    for (var i = currentYear - numOfYears; i < currentYear + numOfYears + 1; i++)
+    {
+        yearInsert = $("<li>");
+        yearText = $("<a>");
+        yearText.addClass("yearDropDowns");
+        yearText.text(i);
+        yearText.attr("id", i);
+        yearInsert.appendTo(yearDropdown);
+        yearText.appendTo(yearInsert);
+    }
 
 
+}
 
 function generateCalendarByMonth(month, year) {
     //Removes all prev text in calendar
@@ -52,11 +76,8 @@ function generateCalendarByMonth(month, year) {
     var firstRun = true;
     for (var j = 1; j < 6; j++) {
         for (var k = 0; k < 7; k++) {
-            if (firstRun) {
-                k = day + 1;
-                firstRun = false;
-            }
-            if (dayCounter == numOfDays + 1) { return; }
+            if (firstRun && (day != '6')) {k = day + 1; firstRun = false;}
+            if (dayCounter == numOfDays + 1) {return;}
             var temp = (j + "." + k);
             var container = document.getElementById(temp);
             container.textContent = (dayCounter);
@@ -75,7 +96,6 @@ function generateCalendarGrid(month, year) {
 
     for (var i = 0; i < 7; i++){
         var firstCol = $('<div>').attr('class', 'col s1 push-s2 daysOfWeek');
-=======
    
         firstCol.text(daysOfTheWeek[i]);
         firstRow.append(firstCol);
@@ -176,12 +196,12 @@ function getWeather() {
         url: weatherURL,
         method: "GET"
     }).then(function(response) {
-        var title = $('<h1>').text('Weather')
-        var humidity = $('<p>').text('Humidity: ' + response.main.humidity)
-        var wind = $('<p>').text('Wind: ' + response.wind.speed)
-        var temp = $('<p>').text('temp: ' + response.main.temp)
+        var title = $('<h1>').text('Weather');
+        var humidity = $('<p>').text('Humidity: ' + response.main.humidity);
+        var wind = $('<p>').text('Wind: ' + response.wind.speed);
+        var temp = $('<p>').text('temp: ' + response.main.temp);
 
-        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png')
+        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
 
     })
 }
@@ -198,5 +218,5 @@ function setTime() {
     currentHours = (currentHours == 0) ? 12 : currentHours;
 
     var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
-    $('#clock').text(currentTimeString)
+    $('#clock').text(currentTimeString);
 }
