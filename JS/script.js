@@ -64,7 +64,7 @@ function generateCalendarGrid(month, year) {
     $('#calendarHolder').append(firstRow);
     //this will actually generate the days of the week in the top row
     for (var i = 0; i < 7; i++){
-        var firstCol = $('<div>').attr('class', 'col s1 daysOfWeek');
+        var firstCol = $('<div>').attr('class', 'col s1 push-s2 daysOfWeek');
         firstCol.text(daysOfTheWeek[i]);
         firstRow.append(firstCol);
     }
@@ -76,7 +76,7 @@ function generateCalendarGrid(month, year) {
         {
             var col = $('<div>').attr('id', ("c" + (i+1) + "." + (j)));
             col.addClass(convertMonth(month));
-            col.addClass("col s1 dayBox");
+            col.addClass("col s1 push-s2 dayBox");
             row.append(col);
             var span = $('<span>').attr('class', 'flow-text');
             span.attr("id", (i+1) + "." + (j) );
