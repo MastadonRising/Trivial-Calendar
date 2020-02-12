@@ -16,6 +16,7 @@ var initialMonth = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMo
 var initialYear = currentDate.getFullYear();
 $('#monthDropdown').text(convertMonth(initialMonth));
 generateCalendarGrid(initialMonth, initialYear);
+var clock = setInterval(setTime, 1000);
 
 
 
@@ -32,7 +33,8 @@ generateCalendarGrid(initialMonth, initialYear);
 
 function generateCalendarByMonth(month, year) {
     //Removes all prev text in calendar
-    for (var z = 1; z < 6; z++) {for (var y = 1; y < 8; y++) {
+    for (var z = 1; z < 6; z++) {
+        for (var y = 0; y < 7; y++) {
         var tmp = (z + "." + y);
         var cont = document.getElementById(tmp);
         cont.innerHTML = ("");
@@ -43,8 +45,8 @@ function generateCalendarByMonth(month, year) {
     var numOfDays = new Date(year, month, '0').getDate();
     var firstRun = true;
     for (var j = 1; j < 6; j++) {
-        for (var k = 1; k < 8; k++) {
-            if (firstRun) {k = day; firstRun = false;}
+        for (var k = 0; k < 7; k++) {
+            if (firstRun) {k = day+1; firstRun = false;}
             if (dayCounter == numOfDays + 1) {return;}
             var temp = (j + "." + k);
             var container = document.getElementById(temp);
@@ -56,7 +58,7 @@ function generateCalendarByMonth(month, year) {
 }
 
 function generateCalendarGrid(month, year) {
-    var daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    var daysOfTheWeek = [ 'Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     //this creates the first row to store days of the week
     var firstRow = $('<div>').attr('class', 'row');
     $('#calendarHolder').append(firstRow);
@@ -66,18 +68,18 @@ function generateCalendarGrid(month, year) {
         firstCol.text(daysOfTheWeek[i]);
         firstRow.append(firstCol);
     }
-    for (var i = 0; i < 5; i++) 
+    for (var i = 0; i < 6; i++) 
     {
         var row = $('<div>').attr('class', 'row');
         $('#calendarHolder').append(row);
         for (var j = 0; j < 7; j++)
         {
-            var col = $('<div>').attr('id', ("c" + (i+1) + "." + (j+1)));
+            var col = $('<div>').attr('id', ("c" + (i+1) + "." + (j)));
             col.addClass(convertMonth(month));
             col.addClass("col s1 dayBox");
             row.append(col);
             var span = $('<span>').attr('class', 'flow-text');
-            span.attr("id", (i+1) + "." + (j+1) );
+            span.attr("id", (i+1) + "." + (j) );
             col.append(span);
 
         }
@@ -124,4 +126,21 @@ function convertMonth(month) {
             return ("December");
             break;
     }
+}
+
+
+
+function setTime(){
+    var currentTime = new Date ( );
+    var currentHours = currentTime.getHours ( );
+var currentMinutes = currentTime.getMinutes ( );
+var currentSeconds = currentTime.getSeconds ( );
+currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
+currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+
+var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+$('#clock').text(currentTimeString)
 }
