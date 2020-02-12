@@ -1,5 +1,6 @@
 //Event Listeners
 $(document).ready(function() {
+    $("#modal1").modal();
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
         if ($(event.target).hasClass("monthDropDowns")) {
@@ -17,11 +18,11 @@ $(document).ready(function() {
 });
 
 //runs on start
-var currentDate = new Date();
-var month = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1);
-var year = currentDate.getFullYear();
-$('#monthDropdown').text(convertMonth(month));
-generateCalendarGrid(month, year);
+var currentDate = new Date(); //stores current date
+var month = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1); //inital set for the month
+var year = currentDate.getFullYear(); //sets inital year
+$('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
+generateCalendarGrid(month, year); 
 var city, region, country, weatherURL;
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 locationLookup();
@@ -29,16 +30,7 @@ setTimeout(createWeatherURL, 1000);
 setTimeout(getWeather, 2000);
 var clock = setInterval(setTime, 1000);
 generateYearDropdown(year);
-
-
-
-
-
-
-
-
-
-
+createModal();
 
 function generateYearDropdown(currentYear) {
     year = parseInt(currentYear);
@@ -106,7 +98,8 @@ function generateCalendarGrid(month, year) {
         for (var j = 0; j < 7; j++) {
             var col = $('<div>').attr('id', ("c" + (i + 1) + "." + (j)));
             col.addClass(convertMonth(month));
-            col.addClass("col s1 push-s2 dayBox");
+            col.addClass("col s1 push-s2 dayBox modal-trigger");
+            col.attr("href", "#modal1");
             row.append(col);
             var span = $('<span>').attr('class', 'flow-text');
             span.attr("id", (i + 1) + "." + (j));
