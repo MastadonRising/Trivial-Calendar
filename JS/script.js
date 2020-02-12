@@ -14,9 +14,10 @@ $(document).ready(function() {
 var currentDate = new Date();
 var initialMonth = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
 var initialYear = currentDate.getFullYear();
+var city, region, country
 $('#monthDropdown').text(convertMonth(initialMonth));
 generateCalendarGrid(initialMonth, initialYear);
-
+locationLookup()
 
 
 
@@ -142,9 +143,16 @@ function createModal() {
 
 
 }
-createModal()
-    //listener to activate modal, modal trigger element have href='modal1' and class modal-trigger 
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal')
-    var instances = M.Modal.init(elems)
-})
+
+//pulls user information to be used for weather api call.
+function locationLookup() {
+    queryURL = 'https://ipapi.co/json/'
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(response) {
+        city = response.city
+        region = response.region_code
+        country = response.country_code
+    })
+}
