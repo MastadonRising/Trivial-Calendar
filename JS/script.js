@@ -158,7 +158,9 @@ function createModal() {
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
 
     var ModalHeader=$('<nav><div class="container"><div class="nav-wrapper">')
-    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader)
+    var ModalWeather= $('<div><ul id="weather">').text('Sunny sun sun')
+    var modalFunFact=$('<div id="fun">').text('Fun Fun Fun')
+    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
     var prevDay =$('<i>').addClass('fas fa-arrow-circle-left fa-2x')
     var nextDay =$('<i class="fas fa-arrow-circle-right fa-2x"></i>')
