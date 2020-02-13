@@ -4,14 +4,14 @@ $(document).ready(function() {
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
         if ($(event.target).hasClass("monthDropDowns")) {
-                month = event.target.id;
-                generateCalendarByMonth(month ,year);
-                $('#monthDropdown').text(convertMonth(event.target.id));
-            }
+            month = event.target.id;
+            generateCalendarByMonth(month, year);
+            $('#monthDropdown').text(convertMonth(event.target.id));
+        }
         if ($(event.target).hasClass("yearDropDowns")) {
-                year = event.target.id;
-                generateCalendarByMonth(month , year);
-                $('#yearDropdown').text(event.target.id);
+            year = event.target.id;
+            generateCalendarByMonth(month, year);
+            $('#yearDropdown').text(event.target.id);
         }
     })
 
@@ -19,11 +19,12 @@ $(document).ready(function() {
 
 //runs on start
 var currentDate = new Date(); //stores current date
-var month = ((currentDate.getMonth().length+1) === 1)? (currentDate.getMonth()+1) : '0' + (currentDate.getMonth()+1); //inital set for the month
+var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1); //inital set for the month
 var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
-generateCalendarGrid(month, year); 
-var city, region, country, weatherURL;
+generateCalendarGrid(month, year);
+var city, region, country, weatherURL, forecastURL
+var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 locationLookup();
 setTimeout(createWeatherURL, 1000);
@@ -38,8 +39,7 @@ function generateYearDropdown(currentYear) {
     yearDropdown = $("#yearDD"); //this is the dropdown we want to add to
     $("#yearDropdown").text(currentYear);
 
-    for (var i = currentYear - numOfYears; i < currentYear + numOfYears + 1; i++)
-    {
+    for (var i = currentYear - numOfYears; i < currentYear + numOfYears + 1; i++) {
         yearInsert = $("<li>");
         yearText = $("<a>");
         yearText.addClass("yearDropDowns");
@@ -68,8 +68,11 @@ function generateCalendarByMonth(month, year) {
     var firstRun = true;
     for (var j = 1; j < 6; j++) {
         for (var k = 0; k < 7; k++) {
-            if (firstRun && (day != '6')) {k = day + 1; firstRun = false;}
-            if (dayCounter == numOfDays + 1) {return;}
+            if (firstRun && (day != '6')) {
+                k = day + 1;
+                firstRun = false;
+            }
+            if (dayCounter == numOfDays + 1) { return; }
             var temp = (j + "." + k);
             var container = document.getElementById(temp);
             container.textContent = (dayCounter);
@@ -86,9 +89,9 @@ function generateCalendarGrid(month, year) {
     $('#calendarHolder').append(firstRow);
     //this will actually generate the days of the week in the top row
 
-    for (var i = 0; i < 7; i++){
+    for (var i = 0; i < 7; i++) {
         var firstCol = $('<div>').attr('class', 'col s1 push-s2 daysOfWeek');
-   
+
         firstCol.text(daysOfTheWeek[i]);
         firstRow.append(firstCol);
     }
@@ -198,6 +201,34 @@ function getWeather() {
 
     })
 }
+
+function createForecastURL() {
+    forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "," + region + "," + country + "&units=imperial&appid=" + APIKey
+}
+
+function getForecast() {
+
+    $.ajax({
+        url: forecastURL,
+        method: "GET"
+    }).then(function(response) {
+
+        //create an array of objects that contain weather data
+        for (let i = 7; i < 40; i += 8) {
+            weatherForecast.push({
+                date: moment.unix(response.list[i].dt).format("MM/DD/YYYY"),
+                temp: response.list[i].main.temp,
+                humidity: response.list[i].main.humidity,
+                wind: response.list[i].wind.speed,
+                conditions: 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
+
+            })
+        }
+    })
+}
+
+
+
 
 function setTime() {
     var currentTime = new Date();

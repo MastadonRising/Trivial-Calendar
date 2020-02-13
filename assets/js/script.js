@@ -85,7 +85,11 @@ function createModal() {
 }
 createModal()
     //listener to activate modal, modal trigger element have href='modal1' and class modal-trigger 
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal')
-    var instances = M.Modal.init(elems)
-})
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     var elems = document.querySelectorAll('.modal')
+    //     var instances = M.Modal.init(elems)
+    // })
+
+$(document).ready(function() {
+    $('.modal').modal();
+});
