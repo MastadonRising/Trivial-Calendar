@@ -7,6 +7,7 @@
     <title>Trivial Calendar</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://kit.fontawesome.com/53374ffd11.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/style.css" />
 
 
@@ -14,10 +15,14 @@
 
 <body>
     <nav>
+        <div class='container'>
         <div class="nav-wrapper" id="headerDiv">
             <a href="#" class="brand-logo">Trivial Calendar</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><span id='clock'></span></li>
+            <ul id="nav-mobile" class="right">
+                <li>
+                    <span id='clock'>
+                    </span>
+                </li>
                 <li>
                     <a class="dropdown-trigger tab" id="monthDropdown" href="#!" data-target="monthDD"></a>
                 </li>
@@ -26,32 +31,33 @@
                 </li>
             </ul>
         </div>
+    </div>
     </nav>
 
-<<<<<<< HEAD
-=======
+    <div  id="calendarHolder"></div>
 
->>>>>>> f2e220187201e211acc06965e09e9badaa409098
-    <div class='container' id="calendarHolder"></div>
 
-<<<<<<< HEAD
-<!-- This tells the drop down what should be inside the month dropdown-->
-        <ul id="monthDD" class="dropdown-content">
-            <li><a id="01" class="monthDropDowns">January</a></li>
-            <li><a id="02" class="monthDropDowns">February</a></li>
-            <li><a id="03" class="monthDropDowns">March</a></li>
-            <li><a id="04" class="monthDropDowns">April</a></li>
-            <li><a id="05" class="monthDropDowns">May</a></li>
-            <li><a id="06" class="monthDropDowns">June</a></li>
-            <li><a id="07" class="monthDropDowns">July</a></li>
-            <li><a id="08" class="monthDropDowns">August</a></li>
-            <li><a id="09" class="monthDropDowns">September</a></li>
-            <li><a id="10" class="monthDropDowns">October</a></li>
-            <li><a id="11" class="monthDropDowns">November</a></li>
-            <li><a id="12" class="monthDropDowns">December</a></li>
-        </ul>
-=======
-
+    <footer class="page-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col s2">
+              <h5 class="white-text">Weather</h5>
+            </div>
+            <div class="col s6">
+                <ul>
+                    <li><span id='location'></span></li>
+                    <li><span id='temp'></span></li>
+                    <li><span id='humidity'></span></li>
+                </ul>
+             </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container">
+          © 2020 Copyright
+          </div>
+        </div>
+      </footer>
 
 
     <!-- This tells the drop down what should be inside the month dropdown-->
@@ -69,7 +75,6 @@
         <li><a id="11" class="monthDropDowns">November</a></li>
         <li><a id="12" class="monthDropDowns">December</a></li>
     </ul>
->>>>>>> 82a20edc4bb8a8cc7b1c08f51f3c2096cb82cd5f
 
     <!-- This tells the drop down what should be inside the year dropdown-->
     <ul id="yearDD" class="dropdown-content">

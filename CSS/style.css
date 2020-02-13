@@ -23,3 +23,19 @@
     align-content: center;
     text-align: center;
 }
+.padded{
+    padding-left: 2%;
+    padding-right: 2%;
+    /* margin-left: 1%;
+    margin-right: 1%; */
+}
+.blank{
+    box-shadow: 0px 0px 0px 0px;
+
+}
+.modal-content{
+    height: 60vh;
+}
+.modal-fixed-footer{
+    align-content: center;
+}
