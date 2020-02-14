@@ -86,10 +86,8 @@ function generateCalendarGrid(month, year) {
     var firstRow = $('<div>').attr('class', 'row');
     $('#calendarHolder').append(firstRow);
     //this will actually generate the days of the week in the top row
-
     for (var i = 0; i < 7; i++) {
         var firstCol = $('<div>').attr('class', 'col s1 push-s2 daysOfWeek');
-
         firstCol.text(daysOfTheWeek[i]);
         firstRow.append(firstCol);
     }
@@ -156,11 +154,20 @@ function convertMonth(month) {
 function createModal() {
 
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
-    var testcontent = $('</p>').text('hello worbl')
-    var modalcontent = $('<div>').addClass('modal-content').append(testcontent)
-    var closebutton = $('<a>').addClass('modal-close btn blue').text('close')
-    var modalfooter = $('<div>').addClass('modal-footer').append(closebutton)
-    modal.append(modalcontent).append(modalfooter)
+
+    var ModalHeader=$('<nav><div class="container"><div class="nav-wrapper">')
+    var ModalWeather= $('<div><ul id="weather">').text('Sunny sun sun')
+    var modalFunFact=$('<div id="fun">').text('Fun Fun Fun')
+    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
+    var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
+    var prevDay =$('<i>').addClass('fas fa-arrow-circle-left fa-2x')
+    var nextDay =$('<i class="fas fa-arrow-circle-right fa-2x"></i>')
+    var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
+        .append(prevDay)
+            .append(closebutton)
+                .append(nextDay);
+    modal.append(modalcontent)
+        .append(modalfooter)
     $('body').append(modal)
 
 
@@ -190,13 +197,15 @@ function getWeather() {
         url: weatherURL,
         method: "GET"
     }).then(function(response) {
-        var title = $('<h1>').text('Weather');
-        var humidity = $('<p>').text('Humidity: ' + response.main.humidity);
-        var wind = $('<p>').text('Wind: ' + response.wind.speed);
-        var temp = $('<p>').text('temp: ' + response.main.temp);
+        console.log(response)
+        var humidity = response.main.humidity;
+        var wind = response.wind.speed;
+        var temp =  response.main.temp;
 
         var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
-
+         $('#location').text('City: ' + city).addClass('padded');
+         $('#temp').text( 'Temperature: ' + temp).addClass('padded');
+         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
     })
 }
 
