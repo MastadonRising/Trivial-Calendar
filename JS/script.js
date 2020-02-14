@@ -48,8 +48,6 @@ function generateYearDropdown(currentYear) {
         yearInsert.appendTo(yearDropdown);
         yearText.appendTo(yearInsert);
     }
-
-
 }
 
 function generateCalendarByMonth(month, year) {
@@ -253,4 +251,22 @@ function setTime() {
     var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
     $('#clock').text(currentTimeString);
 }
+//number is either the day 
+function generateFunFacts(month, day, type) {
 
+    if (type == 'date') {
+        funfactURL = 'http://numbersapi.com/' + month + '/' + day + '/date';
+    }
+    if (type == 'number') {
+        funfactURL = 'http://numbersapi.com/' + day + '/math';
+    }
+    if (type == 'trivia') {
+        funfactURL = 'http://numbersapi.com/' + day + '/trivia';
+    }
+    $.ajax({
+        url: funfactURL,
+        method: "GET"
+    }).then(function(response) {
+        console.log(response);
+    })
+}
