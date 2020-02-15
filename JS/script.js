@@ -31,34 +31,31 @@ var city, region, country, weatherURL, forecastURL
 var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 locationLookup();
-setTimeout(createWeatherURL, 1000);
-setTimeout(getWeather, 2000);
-setTimeout(createForecastURL, 2000);
-setTimeout(getForecast, 2500);
+
 
 var clock = setInterval(setTime, 1000);
 generateYearDropdown(year);
 createModal();
 
 $(document).on("click", ".modal-trigger", function(e) {
-
+    $('#weather').empty()
 
     var day = this.textContent
     if (moment().format('DD') == day) {
-        $('#weather').empty()
         var temp = $('<li>').text($('#temp').text())
         var humidity = $('<li>').text($('#humidity').text())
         $('#weather').append(temp).append(humidity)
-    } else
-        for (let i = 0; i < weatherForecast.length; i++) {
-            if (weatherForecast[i].date === day) {
-                $('#weather').empty()
-                var temp = $('<li>').text(weatherForecast[i].temp)
-                var humidity = $('<li>').text(weatherForecast[i].humidity)
-                $('#weather').append(temp).append(humidity)
-            }
+    }
+    for (let i = 0; i < weatherForecast.length; i++) {
 
+        if (weatherForecast[i].date === day) {
+
+            var temp = $('<li>').text(weatherForecast[i].temp)
+            var humidity = $('<li>').text(weatherForecast[i].humidity)
+            $('#weather').append(temp).append(humidity)
         }
+
+    }
     generateFunFacts(month, day, 'date')
 
 })
@@ -214,6 +211,8 @@ function locationLookup() {
         city = response.city
         region = response.region_code
         country = response.country_code
+        createWeatherURL()
+        getWeather()
     })
 }
 
@@ -236,6 +235,8 @@ function getWeather() {
         $('#location').text('City: ' + city).addClass('padded');
         $('#temp').text('Temperature: ' + temp).addClass('padded');
         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
+        createForecastURL()
+        getForecast()
     })
 }
 
