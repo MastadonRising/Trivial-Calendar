@@ -46,8 +46,9 @@ var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
 generateCalendarGrid(month, year);
 var city, region, country, weatherURL, forecastURL
-var weatherForecast = []
+var weatherForecast = [];
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
+
 locationLookup();
 
 
@@ -115,6 +116,10 @@ function generateCalendarByMonth(month, year) {
     var dayCounter = 1;
     var numOfDays = new Date(year, month, '0').getDate();
     var firstRun = true;
+    var remover = document.querySelectorAll('.dayBox');
+    for(i=0; i< remover.length; i++){
+        remover[i].classList.remove('dayBox');
+    };
     for (var j = 1; j < 6; j++) {
         for (var k = 0; k < 7; k++) {
             if (firstRun && (day != '6')) {
@@ -124,7 +129,9 @@ function generateCalendarByMonth(month, year) {
             if (dayCounter == numOfDays + 1) { return; }
             var temp = (j + "." + k);
             var container = document.getElementById(temp);
+            // var dayBox = document.get
             container.textContent = (dayCounter);
+             container.parentElement.classList.add('dayBox');
             dayCounter++;
         }
 
@@ -159,7 +166,7 @@ function generateCalendarGrid(month, year) {
         for (var j = 0; j < 7; j++) {
             var col = $('<div>').attr('id', ("c" + (i + 1) + "." + (j)));
             col.addClass(convertMonth(month));
-            col.addClass("col s1 push-s2 dayBox modal-trigger");
+            col.addClass("col s1 push-s2  modal-trigger");
             col.attr("href", "#modal1");
             row.append(col);
             var span = $('<span>').attr('class', 'flow-text');
