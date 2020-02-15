@@ -101,7 +101,7 @@ function generateYearDropdown(currentYear) {
         yearText.appendTo(yearInsert);
     }
 }
-
+//generates the calendar days based on month and year
 function generateCalendarByMonth(month, year) {
     //Removes all prev text in calendar
     for (var z = 1; z < 6; z++) {
@@ -111,7 +111,6 @@ function generateCalendarByMonth(month, year) {
             cont.innerHTML = ("");
         }
     }
-
     var day = new Date(year + "-" + month + "-01").getDay();
     var dayCounter = 1;
     var numOfDays = new Date(year, month, '0').getDate();
@@ -177,7 +176,7 @@ function generateCalendarGrid(month, year) {
     }
     generateCalendarByMonth(month, year);
 }
-
+//turns 2 number month to a string month
 function convertMonth(month) {
     switch (month) {
         case '01':
