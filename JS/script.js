@@ -59,32 +59,37 @@ $(document).on("click", ".modal-trigger", function(e) {
     var weatherdata = false
     var day = this.textContent
     var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
+    $('#weather').empty();
+    var weatherdata = false;
+    var day = this.textContent;
+
     if (moment().format('DD') == day) {
-        var temp = $('<li>').text($('#temp').text())
-        var humidity = $('<li>').text($('#humidity').text())
-        $('#weather').append(temp).append(humidity)
-        weatherdata = true
+        var temp = $('<li>').text($('#temp').text());
+        var humidity = $('<li>').text($('#humidity').text());
+        $('#weather').append(temp).append(humidity);
+        weatherdata = true;
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
         if (weatherForecast[i].date === day) {
 
-            var temp = $('<li>').text(weatherForecast[i].temp)
-            var humidity = $('<li>').text(weatherForecast[i].humidity)
-            $('#weather').append(temp).append(humidity)
-            weatherdata = true
+            var temp = $('<li>').text(weatherForecast[i].temp);
+            var humidity = $('<li>').text(weatherForecast[i].humidity);
+            $('#weather').append(temp).append(humidity);
+            weatherdata = true;
         }
 
     }
     if (day < moment().format('DD')) {
         getHistoricalWeather(date)
+
         weatherdata = true
     }
     if (weatherdata === false) {
-        var noData = $('<li>').text('No weather information for this day')
+        var noData = $('<li>').text('No weather information available for this day');
         $('#weather').append(noData)
     }
-    generateFunFacts(month, day, 'date')
+    generateFunFacts(month, day, 'date');
 
 })
 
@@ -223,20 +228,20 @@ function convertMonth(month) {
 //created modal to attach to page
 function createModal() {
 
-    var modal = $('<div>').addClass('modal').attr('id', 'modal1')
+    var modal = $('<div>').addClass('modal').attr('id', 'modal1');
 
-    var ModalHeader = $('<nav><div class="container"><div class="nav-wrapper">')
-    var weather = $('<ul>').attr('id', 'weather')
-    var ModalWeather = $('<div>').append(weather)
-    var modalFunFact = $('<div id="fun">').text('Fun Fun Fun')
-    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
-    var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
-    var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x')
-    var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>')
+    var ModalHeader = $('<nav><div class="container"><div class="nav-wrapper">');
+    var weather = $('<ul>').attr('id', 'weather');
+    var ModalWeather = $('<div>').append(weather);
+    var modalFunFact = $('<div id="fun">').text('Fun Fun Fun');
+    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact);
+    var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close');
+    var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x');
+    var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>');
     var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
         .append(prevDay)
         .append(closebutton)
-        .append(nextDay);
+        .append(nextDay)
     modal.append(modalcontent)
         .append(modalfooter)
     $('body').append(modal)
@@ -246,16 +251,16 @@ function createModal() {
 
 //pulls user information to be used for weather api call.
 function locationLookup() {
-    queryURL = 'https://ipapi.co/json/'
+    queryURL = 'https://ipapi.co/json/';
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
-        city = response.city
-        region = response.region_code
-        country = response.country_code
-        createWeatherURL()
-        getWeather()
+        city = response.city;
+        region = response.region_code;
+        country = response.country_code;
+        createWeatherURL();
+        getWeather();
     })
 }
 
@@ -272,16 +277,16 @@ function getWeather() {
     }).then(function(response) {
         var humidity = response.main.humidity;
         var wind = response.wind.speed;
-        var temp = response.main.temp
-        console.log(response)
+        var temp = response.main.temp;
         lat = response.coord.lat
         lon = response.coord.lon
-        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
+
+        var conditions = $('<img>').attr('src', 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
         $('#temp').text('Temperature: ' + temp).addClass('padded');
         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
-        createForecastURL()
-        getForecast()
+        createForecastURL();
+        getForecast();
     })
 }
 
@@ -303,7 +308,7 @@ function getForecast() {
                 temp: "Temperature: " + response.list[i].main.temp,
                 humidity: "Humidity: " + response.list[i].main.humidity,
                 wind: 'Wind Speed:' + response.list[i].wind.speed,
-                conditions: 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
+                conditions: 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
 
             })
         }
@@ -331,20 +336,29 @@ function setTime() {
 function generateFunFacts(month, day, type) {
 
     if (type == 'date') {
-        funfactURL = 'http://numbersapi.com/' + month + '/' + day + '/date';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + month + '/' + day + '/date' + "?fragment=true&json=true";
     }
     if (type == 'number') {
-        funfactURL = 'http://numbersapi.com/' + day + '/math';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/math' + "?fragment=true&json=true";
     }
     if (type == 'trivia') {
-        funfactURL = 'http://numbersapi.com/' + day + '/trivia';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/trivia' + "?fragment=true&json=true";
     }
-    $.ajax({
-        url: funfactURL,
-        method: "GET"
-    }).then(function(response) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": funfactURL,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "numbersapi.p.rapidapi.com",
+            "x-rapidapi-key": "bdf8af4ec5mshd6215e1f3a50463p1586f2jsn4b1f7c7d1157"
+        }
+    }
 
-        $('#fun').text(response)
+    $.ajax(settings).then(function(response) {
+
+        $('#fun').text(response.text)
+
 
     })
 }
@@ -362,6 +376,9 @@ function getHistoricalWeather(date) {
     }
 
     $.ajax(settings).done(function(response) {
-        console.log(response);
+        var temp = $('<li>').text('Temperature: ' + response.hourly.data[4].temperature)
+        var humidity = $('<li>').text('Temperature: ' + response.hourly.data[4].humidity)
+        $('#weather').append(temp).append(humidity);
+
     })
 }
