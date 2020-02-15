@@ -3,17 +3,15 @@ $(document).ready(function() {
     $(window).resize(function() {
         var weekdays = document.querySelectorAll(".daysOfWeek");
         var x = window.matchMedia("(max-width: 700px)");
-    var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
-        var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
-        var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
-        var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    }
+        var y = window.matchMedia("(min-width: 1100px)");
+
+        if (y.matches) {
+            var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        } else if (x.matches) {
+            var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+        } else {
+            var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        }
         for (var i = 0; i < 7; i++) {
             weekdays[i].textContent = daysOfTheWeek[i];
         }
@@ -45,8 +43,8 @@ var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth(
 var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
 generateCalendarGrid(month, year);
-var city, region, country, weatherURL, forecastURL
-var weatherForecast = [];
+var city, region, country, weatherURL, forecastURL, lat, lon
+var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 
 locationLookup();
@@ -57,9 +55,14 @@ generateYearDropdown(year);
 createModal();
 
 $(document).on("click", ".modal-trigger", function(e) {
+    $('#weather').empty()
+    var weatherdata = false
+    var day = this.textContent
+    var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
     $('#weather').empty();
     var weatherdata = false;
     var day = this.textContent;
+
     if (moment().format('DD') == day) {
         var temp = $('<li>').text($('#temp').text());
         var humidity = $('<li>').text($('#humidity').text());
@@ -76,6 +79,11 @@ $(document).on("click", ".modal-trigger", function(e) {
             weatherdata = true;
         }
 
+    }
+    if (day < moment().format('DD')) {
+        getHistoricalWeather(date)
+
+        weatherdata = true
     }
     if (weatherdata === false) {
         var noData = $('<li>').text('No weather information available for this day');
@@ -117,7 +125,7 @@ function generateCalendarByMonth(month, year) {
     var numOfDays = new Date(year, month, '0').getDate();
     var firstRun = true;
     var remover = document.querySelectorAll('.dayBox');
-    for(i=0; i< remover.length; i++){
+    for (i = 0; i < remover.length; i++) {
         remover[i].classList.remove('dayBox');
     };
     for (var j = 1; j < 6; j++) {
@@ -131,7 +139,7 @@ function generateCalendarByMonth(month, year) {
             var container = document.getElementById(temp);
             // var dayBox = document.get
             container.textContent = (dayCounter);
-             container.parentElement.classList.add('dayBox');
+            container.parentElement.classList.add('dayBox');
             dayCounter++;
         }
 
@@ -141,14 +149,12 @@ function generateCalendarByMonth(month, year) {
 function generateCalendarGrid(month, year) {
     var x = window.matchMedia("(max-width: 700px)");
     var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
+
+    if (y.matches) {
         var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
+    } else if (x.matches) {
         var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
+    } else {
         var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
     //this creates the first row to store days of the week
@@ -232,13 +238,13 @@ function createModal() {
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close');
     var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x');
     var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>');
-    var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer');
-        .append(prevDay);
-        .append(closebutton);
-        .append(nextDay);
-    modal.append(modalcontent);
-        .append(modalfooter);
-    $('body').append(modal);
+    var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
+        .append(prevDay)
+        .append(closebutton)
+        .append(nextDay)
+    modal.append(modalcontent)
+        .append(modalfooter)
+    $('body').append(modal)
 
 
 }
@@ -272,6 +278,8 @@ function getWeather() {
         var humidity = response.main.humidity;
         var wind = response.wind.speed;
         var temp = response.main.temp;
+        lat = response.coord.lat
+        lon = response.coord.lon
 
         var conditions = $('<img>').attr('src', 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
@@ -351,6 +359,26 @@ function generateFunFacts(month, day, type) {
 
         $('#fun').text(response.text)
 
+
+    })
+}
+
+function getHistoricalWeather(date) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://dark-sky.p.rapidapi.com/" + lat + "," + lon + "," + date + "?lang=en&units=auto",
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+            "x-rapidapi-key": "7c9c594624mshd9e6fe716b20cc9p14d369jsna546b1439557"
+        }
+    }
+
+    $.ajax(settings).done(function(response) {
+        var temp = $('<li>').text('Temperature: ' + response.hourly.data[4].temperature)
+        var humidity = $('<li>').text('Temperature: ' + response.hourly.data[4].humidity)
+        $('#weather').append(temp).append(humidity);
 
     })
 }
