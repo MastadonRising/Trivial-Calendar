@@ -260,7 +260,7 @@ function getWeather() {
         var wind = response.wind.speed;
         var temp = response.main.temp;
 
-        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
+        var conditions = $('<img>').attr('src', 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
         $('#temp').text('Temperature: ' + temp).addClass('padded');
         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
@@ -287,7 +287,7 @@ function getForecast() {
                 temp: "Temperature: " + response.list[i].main.temp,
                 humidity: "Humidity: " + response.list[i].main.humidity,
                 wind: 'Wind Speed:' + response.list[i].wind.speed,
-                conditions: 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
+                conditions: 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
 
             })
         }
@@ -315,20 +315,28 @@ function setTime() {
 function generateFunFacts(month, day, type) {
 
     if (type == 'date') {
-        funfactURL = 'http://numbersapi.com/' + month + '/' + day + '/date';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + month + '/' + day + '/date' + "?fragment=true&json=true";
     }
     if (type == 'number') {
-        funfactURL = 'http://numbersapi.com/' + day + '/math';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/math' + "?fragment=true&json=true";
     }
     if (type == 'trivia') {
-        funfactURL = 'http://numbersapi.com/' + day + '/trivia';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/trivia' + "?fragment=true&json=true";
     }
-    $.ajax({
-        url: funfactURL,
-        method: "GET"
-    }).then(function(response) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": funfactURL,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "numbersapi.p.rapidapi.com",
+            "x-rapidapi-key": "bdf8af4ec5mshd6215e1f3a50463p1586f2jsn4b1f7c7d1157"
+        }
+    }
 
-        $('#fun').text(response)
+    $.ajax(settings).then(function(response) {
+
+        $('#fun').text(response.text)
 
     })
 }
