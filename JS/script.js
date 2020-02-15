@@ -1,6 +1,6 @@
 //Event Listeners
 $(document).ready(function() {
-    $(window).resize(function() {
+    $(window).resize(function() { //this will run when the window gets resized and will check to see how big the display is
         var weekdays = document.querySelectorAll(".daysOfWeek");
         var x = window.matchMedia("(max-width: 700px)");
         var y = window.matchMedia("(min-width: 1100px)");
@@ -112,7 +112,7 @@ function generateYearDropdown(currentYear) {
         yearText.appendTo(yearInsert);
     }
 }
-
+//generates the calendar days based on month and year
 function generateCalendarByMonth(month, year) {
     //Removes all prev text in calendar
     for (var z = 1; z < 6; z++) {
@@ -122,7 +122,6 @@ function generateCalendarByMonth(month, year) {
             cont.innerHTML = ("");
         }
     }
-
     var day = new Date(year + "-" + month + "-01").getDay();
     var dayCounter = 1;
     var numOfDays = new Date(year, month, '0').getDate();
@@ -187,7 +186,7 @@ function generateCalendarGrid(month, year) {
     }
     generateCalendarByMonth(month, year);
 }
-
+//turns 2 number month to a string month
 function convertMonth(month) {
     switch (month) {
         case '01':
@@ -364,7 +363,6 @@ function generateFunFacts(month, day, type) {
     $.ajax(settings).then(function(response) {
 
         $('#fun').text(response.text)
-
 
     })
 }
