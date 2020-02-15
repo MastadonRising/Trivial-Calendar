@@ -3,17 +3,15 @@ $(document).ready(function() {
     $(window).resize(function() {
         var weekdays = document.querySelectorAll(".daysOfWeek");
         var x = window.matchMedia("(max-width: 700px)");
-    var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
-        var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
-        var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
-        var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    }
+        var y = window.matchMedia("(min-width: 1100px)");
+
+        if (y.matches) {
+            var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        } else if (x.matches) {
+            var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+        } else {
+            var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        }
         for (var i = 0; i < 7; i++) {
             weekdays[i].textContent = daysOfTheWeek[i];
         }
@@ -45,7 +43,7 @@ var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth(
 var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
 generateCalendarGrid(month, year);
-var city, region, country, weatherURL, forecastURL
+var city, region, country, weatherURL, forecastURL, lat, lon
 var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 locationLookup();
@@ -59,6 +57,7 @@ $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
     var weatherdata = false
     var day = this.textContent
+    var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
     if (moment().format('DD') == day) {
         var temp = $('<li>').text($('#temp').text())
         var humidity = $('<li>').text($('#humidity').text())
@@ -75,6 +74,10 @@ $(document).on("click", ".modal-trigger", function(e) {
             weatherdata = true
         }
 
+    }
+    if (day < moment().format('DD')) {
+        getHistoricalWeather(date)
+        weatherdata = true
     }
     if (weatherdata === false) {
         var noData = $('<li>').text('No weather information for this day')
@@ -134,14 +137,12 @@ function generateCalendarByMonth(month, year) {
 function generateCalendarGrid(month, year) {
     var x = window.matchMedia("(max-width: 700px)");
     var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
+
+    if (y.matches) {
         var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
+    } else if (x.matches) {
         var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
+    } else {
         var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
     //this creates the first row to store days of the week
@@ -264,8 +265,10 @@ function getWeather() {
     }).then(function(response) {
         var humidity = response.main.humidity;
         var wind = response.wind.speed;
-        var temp = response.main.temp;
-
+        var temp = response.main.temp
+        console.log(response)
+        lat = response.coord.lat
+        lon = response.coord.lon
         var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
         $('#temp').text('Temperature: ' + temp).addClass('padded');
@@ -336,5 +339,22 @@ function generateFunFacts(month, day, type) {
 
         $('#fun').text(response)
 
+    })
+}
+
+function getHistoricalWeather(date) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://dark-sky.p.rapidapi.com/" + lat + "," + lon + "," + date + "?lang=en&units=auto",
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+            "x-rapidapi-key": "7c9c594624mshd9e6fe716b20cc9p14d369jsna546b1439557"
+        }
+    }
+
+    $.ajax(settings).done(function(response) {
+        console.log(response);
     })
 }
