@@ -56,8 +56,6 @@ var clock = setInterval(setTime, 1000);
 generateYearDropdown(year);
 createModal();
 
-<<<<<<< HEAD
-=======
 $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
 
@@ -80,7 +78,6 @@ $(document).on("click", ".modal-trigger", function(e) {
     generateFunFacts(month, day, 'date')
 
 })
->>>>>>> 8e0b1ec7657784abf65d1e27f0d33d5a023929dd
 
 function generateYearDropdown(currentYear) {
     year = parseInt(currentYear);
@@ -136,10 +133,6 @@ function generateCalendarByMonth(month, year) {
 }
 
 function generateCalendarGrid(month, year) {
-<<<<<<< HEAD
-    var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    
-=======
     var x = window.matchMedia("(max-width: 700px)");
     var y = window.matchMedia("(min-width: 1100px)");
     
@@ -152,7 +145,6 @@ function generateCalendarGrid(month, year) {
     else {
         var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
->>>>>>> 8e0b1ec7657784abf65d1e27f0d33d5a023929dd
     //this creates the first row to store days of the week
     var firstRow = $('<div>').attr('class', 'row');
     $('#calendarHolder').append(firstRow);
