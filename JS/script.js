@@ -34,6 +34,7 @@ $(document).ready(function() {
     })
 
 });
+// brings up the modal
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal')
     var instances = M.Modal.init(elems)
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //runs on start
 var currentDate = new Date(); //stores current date
+var day = ''// Day currently selected 
 var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1); //inital set for the month
 var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
@@ -59,8 +61,10 @@ createModal();
 $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
     var weatherdata = false
-    var day = this.textContent
-    if (moment().format('DD') == day) {
+    day= this.textContent;
+    var displayDate= moment(Date(year,month,day)).format('MM-DD-YYYY')
+    $('.dateDisplay').text(displayDate);
+    if (moment().format('DD') == day && moment(currentDate).month() + 1 == month) {
         var temp = $('<li>').text($('#temp').text())
         var humidity = $('<li>').text($('#humidity').text())
         $('#weather').append(temp).append(humidity)
@@ -68,7 +72,7 @@ $(document).on("click", ".modal-trigger", function(e) {
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
-        if (weatherForecast[i].date === day) {
+        if (weatherForecast[i].date === day && weatherForecast[i].month == month ) {
 
             var temp = $('<li>').text(weatherForecast[i].temp)
             var humidity = $('<li>').text(weatherForecast[i].humidity)
@@ -82,6 +86,7 @@ $(document).on("click", ".modal-trigger", function(e) {
         $('#weather').append(noData)
     }
     generateFunFacts(month, day, 'date')
+
 
 })
 
@@ -132,6 +137,7 @@ function generateCalendarByMonth(month, year) {
             // var dayBox = document.get
             container.textContent = (dayCounter);
              container.parentElement.classList.add('dayBox');
+             current();
             dayCounter++;
         }
 
@@ -221,10 +227,10 @@ function convertMonth(month) {
 
 //created modal to attach to page
 function createModal() {
-
+    
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
-
-    var ModalHeader = $('<nav><div class="container"><div class="nav-wrapper">')
+    var displayC= $('<div class="col s6 m4 l4"><h5 class ="clock">')
+    var ModalHeader = $('<nav><div ><div class="nav-wrapper"><div class= "row mHeader"><div class="col s10 m4 l4"><h4 class="dateDisplay">');
     var weather = $('<ul>').attr('id', 'weather')
     var ModalWeather = $('<div>').append(weather)
     var modalFunFact = $('<div id="fun">').text('Fun Fun Fun')
@@ -236,9 +242,12 @@ function createModal() {
         .append(prevDay)
         .append(closebutton)
         .append(nextDay);
+        
     modal.append(modalcontent)
-        .append(modalfooter)
+        .append(modalfooter);
+        
     $('body').append(modal)
+    
 
 
 }
@@ -297,6 +306,7 @@ function getForecast() {
         for (let i = 7; i < 40; i += 8) {
             weatherForecast.push({
                 date: moment.unix(response.list[i].dt).format("DD"),
+                month: moment.unix(response.list[i].dt).format("MM"),
                 temp: "Temperature: " + response.list[i].main.temp,
                 humidity: "Humidity: " + response.list[i].main.humidity,
                 wind: 'Wind Speed:' + response.list[i].wind.speed,
@@ -306,8 +316,6 @@ function getForecast() {
         }
     })
 }
-
-
 
 
 function setTime() {
@@ -322,7 +330,7 @@ function setTime() {
     currentHours = (currentHours == 0) ? 12 : currentHours;
 
     var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
-    $('#clock').text(currentTimeString);
+    $('.clock').text(currentTimeString);
 }
 //number is either the day 
 function generateFunFacts(month, day, type) {
@@ -342,6 +350,19 @@ function generateFunFacts(month, day, type) {
     }).then(function(response) {
 
         $('#fun').text(response)
-
+        
     })
+};
+
+function current(){
+    var dayboxes = document.querySelectorAll('.dayBox')
+    for (i=0; i< dayboxes.length; i++){
+        if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month  ){
+            dayboxes[i].classList.add('currentDay')
+            console.log('working')
+        
+        }else {
+            dayboxes[i].classList.remove('currentDay')          
+}      
+    }
 }
