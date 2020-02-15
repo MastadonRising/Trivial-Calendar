@@ -3,17 +3,15 @@ $(document).ready(function() {
     $(window).resize(function() {
         var weekdays = document.querySelectorAll(".daysOfWeek");
         var x = window.matchMedia("(max-width: 700px)");
-    var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
-        var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
-        var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
-        var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    }
+        var y = window.matchMedia("(min-width: 1100px)");
+
+        if (y.matches) {
+            var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        } else if (x.matches) {
+            var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+        } else {
+            var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        }
         for (var i = 0; i < 7; i++) {
             weekdays[i].textContent = daysOfTheWeek[i];
         }
@@ -47,8 +45,8 @@ var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth(
 var year = currentDate.getFullYear(); //sets inital year
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
 generateCalendarGrid(month, year);
-var city, region, country, weatherURL, forecastURL
-var weatherForecast = [];
+var city, region, country, weatherURL, forecastURL, lat, lon
+var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 
 locationLookup();
@@ -61,31 +59,39 @@ createModal();
 $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
     var weatherdata = false
-    day= this.textContent;
-    var displayDate= moment(Date(year,month,day)).format('MM-DD-YYYY')
-    $('.dateDisplay').text(displayDate);
-    if (moment().format('DD') == day && moment(currentDate).month() + 1 == month) {
-        var temp = $('<li>').text($('#temp').text())
-        var humidity = $('<li>').text($('#humidity').text())
-        $('#weather').append(temp).append(humidity)
-        weatherdata = true
+    var day = this.textContent
+    var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
+    $('#weather').empty();
+    var weatherdata = false;
+    var day = this.textContent;
+
+    if (moment().format('DD') == day) {
+        var temp = $('<li>').text($('#temp').text());
+        var humidity = $('<li>').text($('#humidity').text());
+        $('#weather').append(temp).append(humidity);
+        weatherdata = true;
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
         if (weatherForecast[i].date === day && weatherForecast[i].month == month ) {
 
-            var temp = $('<li>').text(weatherForecast[i].temp)
-            var humidity = $('<li>').text(weatherForecast[i].humidity)
-            $('#weather').append(temp).append(humidity)
-            weatherdata = true
+            var temp = $('<li>').text(weatherForecast[i].temp);
+            var humidity = $('<li>').text(weatherForecast[i].humidity);
+            $('#weather').append(temp).append(humidity);
+            weatherdata = true;
         }
 
     }
+    if (day < moment().format('DD')) {
+        getHistoricalWeather(date)
+
+        weatherdata = true
+    }
     if (weatherdata === false) {
-        var noData = $('<li>').text('No weather information for this day')
+        var noData = $('<li>').text('No weather information available for this day');
         $('#weather').append(noData)
     }
-    generateFunFacts(month, day, 'date')
+    generateFunFacts(month, day, 'date');
 
 
 })
@@ -122,7 +128,7 @@ function generateCalendarByMonth(month, year) {
     var numOfDays = new Date(year, month, '0').getDate();
     var firstRun = true;
     var remover = document.querySelectorAll('.dayBox');
-    for(i=0; i< remover.length; i++){
+    for (i = 0; i < remover.length; i++) {
         remover[i].classList.remove('dayBox');
     };
     for (var j = 1; j < 6; j++) {
@@ -147,14 +153,12 @@ function generateCalendarByMonth(month, year) {
 function generateCalendarGrid(month, year) {
     var x = window.matchMedia("(max-width: 700px)");
     var y = window.matchMedia("(min-width: 1100px)");
-    
-    if (y.matches){
+
+    if (y.matches) {
         var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
-    else if (x.matches) {
+    } else if (x.matches) {
         var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-    else {
+    } else {
         var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
     //this creates the first row to store days of the week
@@ -254,16 +258,16 @@ function createModal() {
 
 //pulls user information to be used for weather api call.
 function locationLookup() {
-    queryURL = 'https://ipapi.co/json/'
+    queryURL = 'https://ipapi.co/json/';
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
-        city = response.city
-        region = response.region_code
-        country = response.country_code
-        createWeatherURL()
-        getWeather()
+        city = response.city;
+        region = response.region_code;
+        country = response.country_code;
+        createWeatherURL();
+        getWeather();
     })
 }
 
@@ -281,13 +285,15 @@ function getWeather() {
         var humidity = response.main.humidity;
         var wind = response.wind.speed;
         var temp = response.main.temp;
+        lat = response.coord.lat
+        lon = response.coord.lon
 
-        var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
+        var conditions = $('<img>').attr('src', 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
         $('#temp').text('Temperature: ' + temp).addClass('padded');
         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
-        createForecastURL()
-        getForecast()
+        createForecastURL();
+        getForecast();
     })
 }
 
@@ -310,7 +316,7 @@ function getForecast() {
                 temp: "Temperature: " + response.list[i].main.temp,
                 humidity: "Humidity: " + response.list[i].main.humidity,
                 wind: 'Wind Speed:' + response.list[i].wind.speed,
-                conditions: 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
+                conditions: 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
 
             })
         }
@@ -336,21 +342,50 @@ function setTime() {
 function generateFunFacts(month, day, type) {
 
     if (type == 'date') {
-        funfactURL = 'http://numbersapi.com/' + month + '/' + day + '/date';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + month + '/' + day + '/date' + "?fragment=true&json=true";
     }
     if (type == 'number') {
-        funfactURL = 'http://numbersapi.com/' + day + '/math';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/math' + "?fragment=true&json=true";
     }
     if (type == 'trivia') {
-        funfactURL = 'http://numbersapi.com/' + day + '/trivia';
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/trivia' + "?fragment=true&json=true";
     }
-    $.ajax({
-        url: funfactURL,
-        method: "GET"
-    }).then(function(response) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": funfactURL,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "numbersapi.p.rapidapi.com",
+            "x-rapidapi-key": "bdf8af4ec5mshd6215e1f3a50463p1586f2jsn4b1f7c7d1157"
+        }
+    }
 
-        $('#fun').text(response)
+    $.ajax(settings).then(function(response) {
+
+        $('#fun').text(response.text)
+
+
+    })
+}
+
+function getHistoricalWeather(date) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://dark-sky.p.rapidapi.com/" + lat + "," + lon + "," + date + "?lang=en&units=auto",
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+            "x-rapidapi-key": "7c9c594624mshd9e6fe716b20cc9p14d369jsna546b1439557"
+        }
+    }
         
+    $.ajax(settings).done(function(response) {
+        var temp = $('<li>').text('Temperature: ' + response.hourly.data[4].temperature)
+        var humidity = $('<li>').text('Temperature: ' + response.hourly.data[4].humidity)
+        $('#weather').append(temp).append(humidity);
+
     })
 };
 
