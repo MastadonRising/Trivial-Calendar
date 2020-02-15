@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivial Calendar</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://kit.fontawesome.com/53374ffd11.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/style.css" />
@@ -16,29 +16,38 @@
 <body>
     <nav>
         <div class='container'>
+<<<<<<< HEAD
         <div class="nav-wrapper" id="headerDiv">
             <a href="#" class="brand-logo left">Trivial Calendar</a>
             <ul id="nav-mobile" class="right">
                 <li>
                     <span  id='clock'>
+=======
+            <div class="nav-wrapper" id="headerDiv">
+                <a href="#" class="brand-logo">Trivial Calendar</a>
+                <ul id="nav-mobile" class="right">
+                    <li>
+                        <span id='clock'>
+>>>>>>> 8e0b1ec7657784abf65d1e27f0d33d5a023929dd
                     </span>
-                </li>
-                <li>
-                    <a class="dropdown-trigger tab" id="monthDropdown" href="#!" data-target="monthDD"></a>
-                </li>
-                <li>
-                    <a class="dropdown-trigger tab" id="yearDropdown" href="#!" data-target="yearDD"></a>
-                </li>
-            </ul>
+                    </li>
+                    <li>
+                        <a class="dropdown-trigger tab" id="monthDropdown" href="#!" data-target="monthDD"></a>
+                    </li>
+                    <li>
+                        <a class="dropdown-trigger tab" id="yearDropdown" href="#!" data-target="yearDD"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
     </nav>
 
-    <div  id="calendarHolder"></div>
+    <div id="calendarHolder"></div>
 
 
     <footer class="page-footer">
         <div class="container">
+<<<<<<< HEAD
           <div class="row">
             <div class="col s12 l2 m2 ">
               <h5 class="white-text">Weather</h5>
@@ -51,13 +60,27 @@
                 </ul>
              </div>
           </div>
+=======
+            <div class="row">
+                <div class="col s2">
+                    <h5 class="white-text">Weather</h5>
+                </div>
+                <div class="col s6">
+                    <ul>
+                        <li><span id='location'></span></li>
+                        <li><span id='temp'></span></li>
+                        <li><span id='humidity'></span></li>
+                    </ul>
+                </div>
+            </div>
+>>>>>>> 8e0b1ec7657784abf65d1e27f0d33d5a023929dd
         </div>
         <div class="footer-copyright">
-          <div class="container">
-          © 2020 Copyright
-          </div>
+            <div class="container">
+                © 2020 Copyright
+            </div>
         </div>
-      </footer>
+    </footer>
 
 
     <!-- This tells the drop down what should be inside the month dropdown-->
@@ -80,7 +103,6 @@
     <ul id="yearDD" class="dropdown-content">
 
     </ul>
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
