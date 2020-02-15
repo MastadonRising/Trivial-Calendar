@@ -1,3 +1,4 @@
+
 #header {
     padding-left: 10px;
     padding-right: 10px;
@@ -15,9 +16,12 @@
 }
 .daysOfWeek{
     padding-left: 1px 1px 1px 1px ;
+    margin-top: 2%;
     text-align: center;
     padding: 1%;
+    background-color: cornflowerblue;
     box-shadow: cadetblue 1px 1px 1px 1px;
+    border-radius: 25% 0% 25% 0%;
 }
 .headerDiv{
     align-content: center;
@@ -44,3 +48,4 @@
 #clock{display: none;}
 
 }
+
