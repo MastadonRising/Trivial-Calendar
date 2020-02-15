@@ -1,6 +1,6 @@
 //Event Listeners
 $(document).ready(function() {
-    $("#modal1").modal();
+
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
         if ($(event.target).hasClass("monthDropDowns")) {
@@ -16,6 +16,10 @@ $(document).ready(function() {
     })
 
 });
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal')
+    var instances = M.Modal.init(elems)
+})
 
 //runs on start
 var currentDate = new Date(); //stores current date
@@ -29,9 +33,35 @@ var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 locationLookup();
 setTimeout(createWeatherURL, 1000);
 setTimeout(getWeather, 2000);
+setTimeout(createForecastURL, 2000);
+setTimeout(getForecast, 2500);
+
 var clock = setInterval(setTime, 1000);
 generateYearDropdown(year);
 createModal();
+
+$(document).on("click", ".modal-trigger", function(e) {
+
+
+    var day = this.textContent
+    if (moment().format('DD') == day) {
+        $('#weather').empty()
+        var temp = $('<li>').text($('#temp').text())
+        var humidity = $('<li>').text($('#humidity').text())
+        $('#weather').append(temp).append(humidity)
+    } else
+        for (let i = 0; i < weatherForecast.length; i++) {
+            if (weatherForecast[i].date === day) {
+                $('#weather').empty()
+                var temp = $('<li>').text(weatherForecast[i].temp)
+                var humidity = $('<li>').text(weatherForecast[i].humidity)
+                $('#weather').append(temp).append(humidity)
+            }
+
+        }
+    generateFunFacts(month, day, 'date')
+
+})
 
 function generateYearDropdown(currentYear) {
     year = parseInt(currentYear);
@@ -155,17 +185,18 @@ function createModal() {
 
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
 
-    var ModalHeader=$('<nav><div class="container"><div class="nav-wrapper">')
-    var ModalWeather= $('<div><ul id="weather">').text('Sunny sun sun')
-    var modalFunFact=$('<div id="fun">').text('Fun Fun Fun')
+    var ModalHeader = $('<nav><div class="container"><div class="nav-wrapper">')
+    var weather = $('<ul>').attr('id', 'weather')
+    var ModalWeather = $('<div>').append(weather)
+    var modalFunFact = $('<div id="fun">').text('Fun Fun Fun')
     var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
-    var prevDay =$('<i>').addClass('fas fa-arrow-circle-left fa-2x')
-    var nextDay =$('<i class="fas fa-arrow-circle-right fa-2x"></i>')
+    var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x')
+    var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>')
     var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
         .append(prevDay)
-            .append(closebutton)
-                .append(nextDay);
+        .append(closebutton)
+        .append(nextDay);
     modal.append(modalcontent)
         .append(modalfooter)
     $('body').append(modal)
@@ -197,15 +228,14 @@ function getWeather() {
         url: weatherURL,
         method: "GET"
     }).then(function(response) {
-        console.log(response)
         var humidity = response.main.humidity;
         var wind = response.wind.speed;
-        var temp =  response.main.temp;
+        var temp = response.main.temp;
 
         var conditions = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
-         $('#location').text('City: ' + city).addClass('padded');
-         $('#temp').text( 'Temperature: ' + temp).addClass('padded');
-         $('#humidity').text('Humidity: ' + humidity).addClass('padded');
+        $('#location').text('City: ' + city).addClass('padded');
+        $('#temp').text('Temperature: ' + temp).addClass('padded');
+        $('#humidity').text('Humidity: ' + humidity).addClass('padded');
     })
 }
 
@@ -223,10 +253,10 @@ function getForecast() {
         //create an array of objects that contain weather data
         for (let i = 7; i < 40; i += 8) {
             weatherForecast.push({
-                date: moment.unix(response.list[i].dt).format("MM/DD/YYYY"),
-                temp: response.list[i].main.temp,
-                humidity: response.list[i].main.humidity,
-                wind: response.list[i].wind.speed,
+                date: moment.unix(response.list[i].dt).format("DD"),
+                temp: "Temperature: " + response.list[i].main.temp,
+                humidity: "Humidity: " + response.list[i].main.humidity,
+                wind: 'Wind Speed:' + response.list[i].wind.speed,
                 conditions: 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
 
             })
@@ -267,6 +297,8 @@ function generateFunFacts(month, day, type) {
         url: funfactURL,
         method: "GET"
     }).then(function(response) {
-        console.log(response);
+
+        $('#fun').text(response)
+
     })
 }
