@@ -39,12 +39,13 @@ createModal();
 
 $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
-
+    var weatherdata = false
     var day = this.textContent
     if (moment().format('DD') == day) {
         var temp = $('<li>').text($('#temp').text())
         var humidity = $('<li>').text($('#humidity').text())
         $('#weather').append(temp).append(humidity)
+        weatherdata = true
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
@@ -53,8 +54,13 @@ $(document).on("click", ".modal-trigger", function(e) {
             var temp = $('<li>').text(weatherForecast[i].temp)
             var humidity = $('<li>').text(weatherForecast[i].humidity)
             $('#weather').append(temp).append(humidity)
+            weatherdata = true
         }
 
+    }
+    if (weatherdata === false) {
+        var noData = $('<li>').text('No weather information for this day')
+        $('#weather').append(noData)
     }
     generateFunFacts(month, day, 'date')
 
