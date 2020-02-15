@@ -1,6 +1,24 @@
 //Event Listeners
 $(document).ready(function() {
-
+    $(window).resize(function() {
+        var weekdays = document.querySelectorAll(".daysOfWeek");
+        var x = window.matchMedia("(max-width: 700px)");
+    var y = window.matchMedia("(min-width: 1100px)");
+    
+    if (y.matches){
+        var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    }
+    else if (x.matches) {
+        var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    }
+    else {
+        var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    }
+        for (var i = 0; i < 7; i++) {
+            weekdays[i].textContent = daysOfTheWeek[i];
+        }
+    });
+    $("#modal1").modal();
     $(".dropdown-trigger").dropdown();
     $('a').on("click", function(event) {
         if ($(event.target).hasClass("monthDropDowns")) {
@@ -114,7 +132,18 @@ function generateCalendarByMonth(month, year) {
 }
 
 function generateCalendarGrid(month, year) {
-    var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var x = window.matchMedia("(max-width: 700px)");
+    var y = window.matchMedia("(min-width: 1100px)");
+    
+    if (y.matches){
+        var daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    }
+    else if (x.matches) {
+        var daysOfTheWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    }
+    else {
+        var daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    }
     //this creates the first row to store days of the week
     var firstRow = $('<div>').attr('class', 'row');
     $('#calendarHolder').append(firstRow);
