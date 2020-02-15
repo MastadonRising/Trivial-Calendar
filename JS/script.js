@@ -1,6 +1,6 @@
 //Event Listeners
 $(document).ready(function() {
-    $(window).resize(function() {
+    $(window).resize(function() { //this will run when the window gets resized and will check to see how big the display is
         var weekdays = document.querySelectorAll(".daysOfWeek");
         var x = window.matchMedia("(max-width: 700px)");
     var y = window.matchMedia("(min-width: 1100px)");
@@ -232,12 +232,12 @@ function createModal() {
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close');
     var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x');
     var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>');
-    var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer');
-        .append(prevDay);
-        .append(closebutton);
-        .append(nextDay);
-    modal.append(modalcontent);
-        .append(modalfooter);
+    var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
+        .append(prevDay)
+        .append(closebutton)
+        .append(nextDay)
+    modal.append(modalcontent)
+        .append(modalfooter)
     $('body').append(modal);
 
 
@@ -350,7 +350,6 @@ function generateFunFacts(month, day, type) {
     $.ajax(settings).then(function(response) {
 
         $('#fun').text(response.text)
-
 
     })
 }
