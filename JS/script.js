@@ -38,11 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Modal.init(elems)
 })
 
+
+
+
 //runs on start
 var currentDate = new Date(); //stores current date
 var day = ''// Day currently selected 
 var month = ((currentDate.getMonth().length + 1) === 1) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1); //inital set for the month
 var year = currentDate.getFullYear(); //sets inital year
+var activeDate = '' //currently selected date for display 
 $('#monthDropdown').text(convertMonth(month)); //changes dropdown to inital month
 generateCalendarGrid(month, year);
 var city, region, country, weatherURL, forecastURL, lat, lon
@@ -50,8 +54,6 @@ var weatherForecast = []
 var APIKey = "cbe32bb3b579dad365829cdc5ba21e51";
 
 locationLookup();
-
-
 var clock = setInterval(setTime, 1000);
 generateYearDropdown(year);
 createModal();
@@ -61,6 +63,8 @@ $(document).on("click", ".modal-trigger", function(e) {
     var weatherdata = false
     var day = this.textContent
     var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
+    var activeDate = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").format('MM-DD-YYYY')
+    $('.dateDisplay').text(activeDate)
     $('#weather').empty();
     var weatherdata = false;
     var day = this.textContent;
@@ -233,26 +237,21 @@ function createModal() {
     
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
     var displayC= $('<div class="col s6 m4 l4"><h5 class ="clock">')
-    var ModalHeader = $('<nav><div ><div class="nav-wrapper"><div class= "row mHeader"><div class="col s10 m4 l4"><h4 class="dateDisplay">');
+    var ModalHeader = $('<nav><div ><div class="nav-wrapper"><div class= "row mHeader"><div class="col s10 m4 l4"><h4 class="dateDisplay">').append(displayC);
     var weather = $('<ul>').attr('id', 'weather')
     var ModalWeather = $('<div>').append(weather)
     var modalFunFact = $('<div id="fun">').text('Fun Fun Fun')
     var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
-    var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x')
-    var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>')
+    var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x').attr('id','left')
+    var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>').attr('id','right')
     var modalfooter = $('<div class="footer-copyright modal-fixed-footer center-align">').addClass('page-footer')
         .append(prevDay)
         .append(closebutton)
-        .append(nextDay);
-        
+        .append(nextDay);    
     modal.append(modalcontent)
-        .append(modalfooter);
-        
+        .append(modalfooter); 
     $('body').append(modal)
-    
-
-
 }
 
 //pulls user information to be used for weather api call.
@@ -392,10 +391,91 @@ function current(){
     for (i=0; i< dayboxes.length; i++){
         if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month  ){
             dayboxes[i].classList.add('currentDay')
-            console.log('working')
-        
         }else {
             dayboxes[i].classList.remove('currentDay')          
 }      
     }
 }
+
+// // Navigation
+var left = document.getElementById('left');
+ left.addEventListener('click', function() {
+   
+    $('#weather').empty()
+    var weatherdata = false
+    var day= moment($('.dateDisplay').text())
+    var newDate = day.subtract(1,'days')
+    var date= newDate.unix()
+    $('.dateDisplay').text(newDate.format('MM-DD-YYYY'))
+    
+    $('#weather').empty();
+    var weatherdata = false;
+    
+    if (moment().format('MM-DD-YYYY') == newDate.format('MM-DD-YYYY')) {
+        var temp = $('<li>').text($('#temp').text());
+        var humidity = $('<li>').text($('#humidity').text());
+        $('#weather').append(temp).append(humidity);
+        weatherdata = true;
+    }
+    for (let i = 0; i < weatherForecast.length; i++) {
+
+        if (weatherForecast[i].date === newDate.format('DD') ) {
+
+            var temp = $('<li>').text(weatherForecast[i].temp);
+            var humidity = $('<li>').text(weatherForecast[i].humidity);
+            $('#weather').append(temp).append(humidity);
+            weatherdata = true;
+        }
+
+    }
+    if (newDate.format('MM-DD-YYYY') < moment().format('MM-DD-YYYY')) {
+        getHistoricalWeather(date)
+
+        weatherdata = true
+    }
+    if (weatherdata === false) {
+        var noData = $('<li>').text('No weather information available for this day');
+        $('#weather').append(noData)
+    }
+    generateFunFacts(month, newDate.format('DD'), 'date');
+}); 
+var right = document.getElementById('right')
+right.addEventListener('click', function(){
+    $('#weather').empty()
+    var weatherdata = false
+    var day= moment($('.dateDisplay').text())
+    var newDate = day.add(1,'days')
+    var date= newDate.unix()
+    $('.dateDisplay').text(newDate.format('MM-DD-YYYY'))
+    
+    $('#weather').empty();
+    var weatherdata = false;
+    
+    if (moment().format('MM-DD-YYYY') == newDate.format('MM-DD-YYYY')) {
+        var temp = $('<li>').text($('#temp').text());
+        var humidity = $('<li>').text($('#humidity').text());
+        $('#weather').append(temp).append(humidity);
+        weatherdata = true;
+    }
+    for (let i = 0; i < weatherForecast.length; i++) {
+
+        if (weatherForecast[i].date === newDate.format('DD') ) {
+
+            var temp = $('<li>').text(weatherForecast[i].temp);
+            var humidity = $('<li>').text(weatherForecast[i].humidity);
+            $('#weather').append(temp).append(humidity);
+            weatherdata = true;
+        }
+
+    }
+    if (newDate.format('MM-DD-YYYY') < moment().format('MM-DD-YYYY')) {
+        getHistoricalWeather(date)
+
+        weatherdata = true
+    }
+    if (weatherdata === false) {
+        var noData = $('<li>').text('No weather information available for this day');
+        $('#weather').append(noData)
+    }
+    generateFunFacts(month, newDate.format('DD'), 'date');
+}); 
