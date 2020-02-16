@@ -236,11 +236,10 @@ function convertMonth(month) {
 function createModal() {
     
     var modal = $('<div>').addClass('modal').attr('id', 'modal1')
-    var displayC= $('<div class="col s6 m4 l4"><h5 class ="clock">')
-    var ModalHeader = $('<nav><div ><div class="nav-wrapper"><div class= "row mHeader"><div class="col s10 m4 l4"><h4 class="dateDisplay">').append(displayC);
+        var ModalHeader = $('<nav class="nav-wrapper"><div class= " mHeader col s10 m10 l10"><h4 class="dateDisplay"></h4><span class="clock right">')
     var weather = $('<ul>').attr('id', 'weather')
-    var ModalWeather = $('<div>').append(weather)
-    var modalFunFact = $('<div id="fun">').text('Fun Fun Fun')
+    var ModalWeather = $('<div class="row">').append(weather)
+    var modalFunFact = $('<div class="row" id="fun">').text('Fun Fun Fun')
     var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
     var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x').attr('id','left')
@@ -419,7 +418,7 @@ var left = document.getElementById('left');
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
-        if (weatherForecast[i].date === newDate.format('DD') ) {
+        if (weatherForecast[i].date === newDate.format('DD')  && weatherForecast[i].month === month) {
 
             var temp = $('<li>').text(weatherForecast[i].temp);
             var humidity = $('<li>').text(weatherForecast[i].humidity);
@@ -459,7 +458,7 @@ right.addEventListener('click', function(){
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
-        if (weatherForecast[i].date === newDate.format('DD') ) {
+        if (weatherForecast[i].date === newDate.format('DD') && weatherForecast[i].month === month ) {
 
             var temp = $('<li>').text(weatherForecast[i].temp);
             var humidity = $('<li>').text(weatherForecast[i].humidity);
