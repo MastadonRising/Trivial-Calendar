@@ -341,13 +341,13 @@ function setTime() {
 function generateFunFacts(month, day, type) {
 
     if (type == 'date') {
-        funfactURL = 'https://numbersapi.p.rapidapi.com/' + month + '/' + day + '/date' + "?fragment=true&json=true";
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + month + '/' + day + '/date' + "?json=true";
     }
     if (type == 'number') {
-        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/math' + "?fragment=true&json=true";
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/math' + "?json=true";
     }
     if (type == 'trivia') {
-        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/trivia' + "?fragment=true&json=true";
+        funfactURL = 'https://numbersapi.p.rapidapi.com/' + day + '/trivia' + "?json=true";
     }
     var settings = {
         "async": true,
@@ -359,10 +359,10 @@ function generateFunFacts(month, day, type) {
             "x-rapidapi-key": "bdf8af4ec5mshd6215e1f3a50463p1586f2jsn4b1f7c7d1157"
         }
     }
+    console.log(funfactURL)
+    $.ajax(settings).done(function(response) {
 
-    $.ajax(settings).then(function(response) {
-
-        $('#fun').text(response.text)
+        $('#fun').text(response.text);
 
     })
 }
