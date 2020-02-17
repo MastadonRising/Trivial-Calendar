@@ -38,9 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Modal.init(elems)
 })
 
-
-
-
 //runs on start
 var currentDate = new Date(); //stores current date
 var day = ''// Day currently selected 
@@ -61,13 +58,13 @@ createModal();
 $(document).on("click", ".modal-trigger", function(e) {
     $('#weather').empty()
     var weatherdata = false
-    var day = this.textContent
+    var day = parseInt(this.textContent);
     var date = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").unix()
     var activeDate = moment(month + "/" + day + "/" + year + "12:00", "M/D/YYYY H:mm").format('MM-DD-YYYY')
     $('.dateDisplay').text(activeDate)
     $('#weather').empty();
     var weatherdata = false;
-    var day = this.textContent;
+   
 
     if (moment().format('DD') == day) {
         var temp = $('<li>').text($('#temp').text());
@@ -308,7 +305,7 @@ function getForecast() {
         //create an array of objects that contain weather data
         for (let i = 7; i < 40; i += 8) {
             weatherForecast.push({
-                date: moment.unix(response.list[i].dt).format("DD"),
+                date:parseInt( moment.unix(response.list[i].dt).format("DD")),
                 month: moment.unix(response.list[i].dt).format("MM"),
                 temp: "Temperature: " + response.list[i].main.temp,
                 humidity: "Humidity: " + response.list[i].main.humidity,
@@ -388,7 +385,7 @@ function getHistoricalWeather(date) {
 function current(){
     var dayboxes = document.querySelectorAll('.dayBox')
     for (i=0; i< dayboxes.length; i++){
-        if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month && currentDate.getFullYear() == year  ){
+        if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month  ){
             dayboxes[i].classList.add('currentDay')
         }else {
             dayboxes[i].classList.remove('currentDay')          
