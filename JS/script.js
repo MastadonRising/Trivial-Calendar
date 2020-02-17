@@ -388,7 +388,7 @@ function getHistoricalWeather(date) {
 function current(){
     var dayboxes = document.querySelectorAll('.dayBox')
     for (i=0; i< dayboxes.length; i++){
-        if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month  ){
+        if( dayboxes[i].firstChild.innerHTML == moment(currentDate).date() && currentDate.getMonth()+1 == month && currentDate.getFullYear() == year  ){
             dayboxes[i].classList.add('currentDay')
         }else {
             dayboxes[i].classList.remove('currentDay')          
