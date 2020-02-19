@@ -1,4 +1,6 @@
-
+.row{
+    margin-bottom: 10px;
+}
 #header {
     padding-left: 10px;
     padding-right: 10px;
@@ -101,11 +103,13 @@ nav, .page-footer{
     
 }
 
-#fun{
+#fun ,#dayOf {
     color:#E54B4B;
     font-size: 1.5rem;
     font-family: 'Lora', serif;
+    box-shadow:#96ADC8  5px 5px 5px 5px;
 }
+
 
 .footer-copyright{
     color: #96ADC8;
