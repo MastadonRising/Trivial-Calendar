@@ -16,6 +16,8 @@
    height:100%;
    padding-left: 1px 1px 1px 1px ;
    margin: auto;
+   font-family: 'Lora', serif;
+   font-weight: bolder;
 }
 .dayBox:hover{
     background-color: lightgoldenrodyellow;
@@ -28,12 +30,16 @@
     text-align: center;
     padding: 1%;
     background-color: cornflowerblue;
-    box-shadow: cadetblue 1px 1px 1px 1px;
-    border-radius: 25% 0% 25% 0%;
+    box-shadow: #5f9ea0 1px 1px 1px 1px;
+    border-radius: 75% 0% 75% 0%;
+    font-family: 'Lora', serif;
+    font-weight: bolder;
+    color:#c2095A;
 }
 .headerDiv{
     align-content: center;
     text-align: center;
+    font-family: 'Lora', serif;
 }
 .padded{
     padding-left: 2%;
@@ -47,13 +53,134 @@
 }
 .modal-content{
     height: 60vh;
+    font-family: 'Lora', serif;
 }
 .modal-fixed-footer{
     align-content: center;
+    font-family: 'Lora', serif;
 }
 
-@media(max-width: 700px){
-.clock{display: none;}
 
+.mHeader{
+    height:100%;
+}
+.dateDisplay{
+    width: 30%;
+    margin-block-end: 0%;
+    margin-block-start: 0%;
+    margin: 10px 10px 10px 10px ;
+    font-family: 'Lora', serif;
 }
 
+h4{
+    margin: 10px 1px 1px 1px ;
+    display: inline;
+    font-family: 'Lora', serif;
+}
+
+.clock{
+    margin: 1px 20px 1px 10px ;
+    font-size: 1.5rem;
+    color: #feb95f;
+    font-family: 'Lora', serif;
+}
+nav, .page-footer{
+    background-color:#090446 ;
+    text-shadow:#96ADC8 ;
+    text-decoration: wavy;
+    font-family: 'Lora', serif;
+}
+#weather{
+
+    color:#96ADC8 ;
+    font-size: 1.5rem;
+    border-bottom: 5px;
+    border-bottom-color:#c2095A ;
+    box-shadow: 5px 5px 5px 5px;
+    font-family: 'Lora', serif;
+    
+}
+
+#fun{
+    color:#E54B4B;
+    font-size: 1.5rem;
+    font-family: 'Lora', serif;
+}
+
+.footer-copyright{
+    color: #96ADC8;
+    font-family: 'Lora', serif;
+}
+
+.fa-2x{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.blue{
+    margin-bottom: 1.5%;
+}
+
+@media only screen and (max-width: 996px){
+/* .clock{display: none;} */
+.brand-logo{ 
+margin: 0px 0px 0px 0px;
+
+width: 100%;
+height: 100%;
+left: 15%;
+font-size: 1.6rem;
+ }
+ nav .brand-logo {
+    position: absolute;
+    color: #fff;
+    display: inline-block;
+    font-size: 2.1rem;
+    padding: 0;
+}
+ .dayBox{
+    text-align: center;}
+}
+@media only screen and (max-width: 700px){
+    .clock{display: none;} */
+    .brand-logo{ 
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    height: 100%;
+    left: 15%;
+    font-size: 1.6rem;
+     }
+     nav .brand-logo {
+        position: absolute;
+        color: #fff;
+        display: inline-block;
+        font-size: 1.5rem;
+        padding: 0;
+    }
+     .blue{
+        margin-bottom: 5%;
+    }
+    .dayBox{
+        text-align: center;}
+    }
+    @media only screen and (max-width: 320px){
+        .clock{display: none;} 
+     .brand-logo{ 
+        margin: 0px 0px 0px 0px;
+        width: 100%;
+        height: 100%;
+        left: 5%;
+        font-size: 1rem ;
+         }
+         nav .brand-logo {
+            position: absolute;
+            color: #fff;
+            display: inline-block;
+            font-size: 1.2rem;
+            padding: 0;
+        }
+         .blue{
+            margin-bottom: 10%;
+        }
+        .dayBox{
+            text-align: center;}
+        }
