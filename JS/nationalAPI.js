@@ -1,3 +1,7 @@
+function dayOfReturn (month, day) {
+    var string = returnDayOf(month, day);
+    $('#dayOf').text(string);
+}
 
 function returnDayOf(month, day) {
     month = parseInt(month);
