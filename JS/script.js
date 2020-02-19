@@ -93,7 +93,7 @@ $(document).on("click", ".modal-trigger", function(e) {
         $('#weather').append(noData)
     }
     generateFunFacts(month, day, 'date');
-
+    dayOfReturn(month, day);
 
 })
 
@@ -237,7 +237,8 @@ function createModal() {
     var weather = $('<ul>').attr('id', 'weather')
     var ModalWeather = $('<div class="row">').append(weather)
     var modalFunFact = $('<div class="row" id="fun">').text('Fun Fun Fun')
-    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact)
+    var modalDayOf = $('<div class="row" id="dayOf">').text("day of")
+    var modalcontent = $('<div>').addClass('modal-content').append(ModalHeader).append(ModalWeather).append(modalFunFact).append(modalDayOf)
     var closebutton = $('<a>').addClass('modal-close btn blue v-align').text('close')
     var prevDay = $('<i>').addClass('fas fa-arrow-circle-left fa-2x').attr('id','left')
     var nextDay = $('<i class="fas fa-arrow-circle-right fa-2x"></i>').attr('id','right')
@@ -354,7 +355,6 @@ function generateFunFacts(month, day, type) {
             "x-rapidapi-key": "bdf8af4ec5mshd6215e1f3a50463p1586f2jsn4b1f7c7d1157"
         }
     }
-    console.log(funfactURL)
     $.ajax(settings).done(function(response) {
 
         $('#fun').text(response.text);
@@ -434,6 +434,7 @@ var left = document.getElementById('left');
         $('#weather').append(noData)
     }
     generateFunFacts(month, newDate.format('DD'), 'date');
+    dayOfReturn(month, newDate.format('DD'));
 }); 
 var right = document.getElementById('right')
 right.addEventListener('click', function(){
@@ -474,4 +475,5 @@ right.addEventListener('click', function(){
         $('#weather').append(noData)
     }
     generateFunFacts(month, newDate.format('DD'), 'date');
+    dayOfReturn(month, newDate.format('DD'));
 }); 
