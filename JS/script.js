@@ -284,8 +284,8 @@ function getWeather() {
 
         var conditions = $('<img>').attr('src', 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
         $('#location').text('City: ' + city).addClass('padded');
-        $('#temp').text('Temperature: ' + temp).addClass('padded');
-        $('#humidity').text('Humidity: ' + humidity).addClass('padded');
+        $('#temp').text('Temperature: ' + temp + 'F').addClass('padded');
+        $('#humidity').text('Humidity: ' + humidity + '%').addClass('padded');
         createForecastURL();
         getForecast();
     })
@@ -307,8 +307,8 @@ function getForecast() {
             weatherForecast.push({
                 date:parseInt( moment.unix(response.list[i].dt).format("DD")),
                 month: moment.unix(response.list[i].dt).format("MM"),
-                temp: "Temperature: " + response.list[i].main.temp,
-                humidity: "Humidity: " + response.list[i].main.humidity,
+                temp: "Temperature: " + response.list[i].main.temp +'F',
+                humidity: "Humidity: " + response.list[i].main.humidity +'%',
                 wind: 'Wind Speed:' + response.list[i].wind.speed,
                 conditions: 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png'
 
@@ -375,8 +375,8 @@ function getHistoricalWeather(date) {
     }
         
     $.ajax(settings).done(function(response) {
-        var temp = $('<li>').text('Temperature: ' + response.hourly.data[4].temperature)
-        var humidity = $('<li>').text('Temperature: ' + response.hourly.data[4].humidity)
+        var temp = $('<li>').text('Temperature: ' + response.hourly.data[4].temperature +'F')
+        var humidity = $('<li>').text('Humidity: ' + response.hourly.data[4].humidity*100 +'%')
         $('#weather').append(temp).append(humidity);
 
     })
@@ -415,7 +415,7 @@ var left = document.getElementById('left');
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
-        if (weatherForecast[i].date === newDate.format('DD')  && weatherForecast[i].month === month) {
+        if (weatherForecast[i].date === parseInt(newDate.format('DD'))  && weatherForecast[i].month === month) {
 
             var temp = $('<li>').text(weatherForecast[i].temp);
             var humidity = $('<li>').text(weatherForecast[i].humidity);
@@ -455,7 +455,7 @@ right.addEventListener('click', function(){
     }
     for (let i = 0; i < weatherForecast.length; i++) {
 
-        if (weatherForecast[i].date === newDate.format('DD') && weatherForecast[i].month === month ) {
+        if (weatherForecast[i].date === parseInt(newDate.format('DD')) && weatherForecast[i].month === month ) {
 
             var temp = $('<li>').text(weatherForecast[i].temp);
             var humidity = $('<li>').text(weatherForecast[i].humidity);
